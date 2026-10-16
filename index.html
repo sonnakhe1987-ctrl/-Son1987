@@ -157,17 +157,16 @@ function renderSkillCurriculum(){
  if(!id){out.textContent='Chọn lớp, chủ đề và bài học để xem yêu cầu cần đạt cùng các điểm quan sát kỹ thuật.';return;}
  const item=curriculumLessons.find(x=>x.id===id); if(!item){out.textContent='Không tìm thấy bài học.';return;}
  const tips=getTechniqueTips(item);
- out.textContent=`LỚP ${item.grade} — ${item.topic}
-Bài học: ${item.title}
-Trang tham chiếu: ${item.page}
-
-YÊU CẦU CẦN ĐẠT THAM KHẢO
-${item.learningOutcomes}
-
-ĐIỂM QUAN SÁT KỸ THUẬT
-• ${tips.join('\n• ')}
-
-Lưu ý: Đây là gợi ý quan sát do hệ thống tổng hợp theo tên/chủ đề bài học, không phải nguyên văn sách giáo khoa. Giáo viên cần đối chiếu sách và điều kiện thực tế.`;
+ const t=(item.topic+' '+item.title).toLocaleLowerCase('vi');
+ let steps=['Giáo viên nêu mục tiêu, làm mẫu động tác chậm và nhấn mạnh điểm chính.','Học sinh tập thử không dụng cụ hoặc ở tốc độ thấp; giáo viên quan sát và sửa từng lỗi.','Luyện tập theo lượt/cặp/nhóm, tăng dần độ khó khi học sinh đã kiểm soát tốt động tác.','Thực hiện nhiệm vụ vận dụng ngắn; học sinh tự nhận xét một điểm làm tốt và một điểm cần sửa.'];
+ let mistakes=['Chưa nhớ đúng trình tự hoặc tư thế chuẩn bị.','Thực hiện quá nhanh, thiếu kiểm soát hoặc chưa phối hợp các bộ phận cơ thể.','Chưa chú ý hiệu lệnh, khoảng cách và hướng di chuyển.'];
+ if(/đội hình|đội ngũ|hàng dọc|hàng ngang|đi đều|điểm số|quay/.test(t)){steps=['Giáo viên giải thích khẩu lệnh và làm mẫu từng nhịp.','Học sinh luyện từng động tác tại chỗ, sau đó thực hiện theo đội hình.','Ghép các động tác theo trình tự; giáo viên quan sát hướng quay, dóng hàng và cự li.','Tổ chức thực hiện theo hiệu lệnh, đổi vai chỉ huy khi phù hợp.'];mistakes=['Nghe hoặc phản ứng chậm với khẩu lệnh.','Quay sai hướng, bước không đúng nhịp hoặc hàng chưa thẳng.','Đứng quá gần bạn khi chuyển đội hình.'];}
+ else if(/bơi|nước|thở/.test(t)){steps=['Giáo viên kiểm tra điều kiện hồ bơi, sức khỏe và quy tắc an toàn trước buổi học.','Người dạy bơi đủ chuyên môn làm mẫu trên cạn hoặc tại vị trí an toàn.','Chỉ luyện dưới nước theo tiến trình phù hợp, có giám sát trực tiếp liên tục.','Kết thúc theo hiệu lệnh, kiểm đếm học sinh và rời khu vực nước có trật tự.'];mistakes=['Tự ý xuống nước hoặc rời vị trí được phân công.','Cố nín thở, hoảng sợ hoặc thực hiện vượt khả năng.','Không làm theo hiệu lệnh của người dạy bơi.'];}
+ else if(/bóng|ném|chuyền|bắt/.test(t)){steps=['Giáo viên hướng dẫn tư thế, cách cầm/tiếp xúc bóng và làm mẫu.','Tập tại chỗ với cự li ngắn, bóng nhẹ và tốc độ chậm.','Luyện theo cặp/nhóm, tăng cự li hoặc độ khó từng bước.','Vận dụng trong trò chơi có luật rõ ràng và luân phiên lượt tập.'];mistakes=['Cầm hoặc tiếp xúc bóng chưa đúng.','Dùng lực quá mạnh, hướng bóng thiếu chính xác.','Chưa quan sát người nhận hoặc khu vực phía trước.'];}
+ else if(/nhảy|bật|dây/.test(t)){steps=['Khởi động kỹ cổ chân, gối, hông và làm mẫu động tác.','Tập tư thế chuẩn bị và phối hợp tay-chân ở mức thấp.','Luyện bật/nhảy theo vạch hoặc khu vực quy định, lần lượt từng học sinh.','Tập trung vào tiếp đất nhẹ và ổn định trước khi tăng độ khó.'];mistakes=['Dồn lực chưa hợp lý hoặc phối hợp tay-chân chưa nhịp nhàng.','Tiếp đất cứng, gối khóa hoặc mất thăng bằng.','Thực hiện khi khu vực tiếp đất còn người hoặc vật cản.'];}
+ else if(/lăn|lộn|leo|trèo|thăng bằng/.test(t)){steps=['Giáo viên kiểm tra thảm và thiết bị, làm mẫu từng giai đoạn.','Tập các động tác chuẩn bị đơn giản với hỗ trợ trực tiếp.','Thực hiện từng lượt trên thiết bị phù hợp, giáo viên đứng vị trí bảo vệ.','Chỉ ghép động tác khi học sinh thực hiện ổn định và đúng hướng dẫn.'];mistakes=['Bỏ qua tư thế chuẩn bị hoặc làm sai trình tự.','Thực hiện khi chưa có thảm/thiết bị an toàn.','Tự ý tăng độ khó hoặc thực hiện khi chưa đến lượt.'];}
+ const safety=/bơi|nước/.test(t)?'Bắt buộc có người dạy bơi đủ chuyên môn giám sát trực tiếp; không tập một mình, không thi nín thở; kiểm tra điều kiện nước và dừng ngay khi có dấu hiệu bất thường.':'Kiểm tra sân bãi và dụng cụ; khởi động trước khi tập; giữ khoảng cách, tập theo hiệu lệnh, điều chỉnh độ khó theo khả năng và dừng lại nếu đau, chóng mặt hoặc khó thở.';
+ out.innerHTML=`<h3>Lớp ${item.grade} · ${esc(item.topic)}</h3><p><b>Bài học:</b> ${esc(item.title)} (trang tham chiếu: ${item.page})</p><h4>Yêu cầu cần đạt tham khảo</h4><p>${esc(item.learningOutcomes)}</p><h4>Các bước thực hiện / tổ chức luyện tập</h4><ol>${steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ol><h4>Điểm quan sát kỹ thuật</h4><ul>${tips.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><h4>Lỗi thường gặp cần lưu ý</h4><ul>${mistakes.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><h4>Lưu ý an toàn</h4><p>${esc(safety)}</p><p class="small">Nội dung là gợi ý sư phạm tổng hợp, không phải nguyên văn sách giáo khoa. Giáo viên cần đối chiếu sách và điều kiện thực tế.</p><button class="btn" onclick="useCurriculumLesson('${item.id}')">📘 Đưa bài này vào Soạn giáo án</button>`;
 }
 function openSkillForLesson(id){const item=curriculumLessons.find(x=>x.id===id);if(!item)return;showTab('skills');document.getElementById('skillGrade').value=String(item.grade);populateSkillTopics();document.getElementById('skillTopic').value=item.topic;populateSkillLessons();document.getElementById('skillLesson').value=item.id;renderSkillCurriculum();}
 document.getElementById('skillGrade').addEventListener('change',populateSkillTopics);
